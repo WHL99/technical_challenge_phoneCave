@@ -32,21 +32,26 @@ function App() {
   }
 
 
-
   return (
-    <div className="App">
-
-      {clickedPhone && <PhoneCard clickedPhone={clickedPhone} />}
+    <div className="App" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ paddingTop: '80px' }}>
+        {clickedPhone && <PhoneCard clickedPhone={clickedPhone} />}
+      </div>
 
       {loading && <span> It's loading...</span>}
 
-      {phones.map((phone) => {
-        return (
-          <button onClick={() => { handleClick(phone.id) }} key={phone.id}>
-            {phone.name}
-          </button>
-        )
-      })}
+      <div style={{ position: 'fixed', bottom: '15vh' }}>
+
+        {phones.map((phone) => {
+          return (
+            <button onClick={() => { handleClick(phone.id) }} key={phone.id} style={{ backgroundColor: 'transparent', border: 'none', fontSize: '1.2rem', paddingRight: '20px' }}>
+              {phone.name}
+            </button>
+
+          )
+        })}
+      </div>
+
     </div>
   );
 }
