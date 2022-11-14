@@ -1,23 +1,52 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import PhoneCard from './components/PhoneCard'
 
 function App() {
+  const APIURL = process.env.REACT_APP_APIURL
+  const [phones, setPhones] = useState([])
+  const [clickedPhone, setClickedPhone] = useState(undefined)
+  const [loading, setLoading] = useState(false)
+
+
+  useEffect(() => {
+    fetch(APIURL)
+      .then(res => res.json())
+      .then(data => setPhones(data))
+      .catch(err => {
+        console.error('Oops!', err)
+      })
+  }, [])
+
+  const handleClick = (id) => {
+    setLoading(true)
+    fetch(APIURL + `${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setClickedPhone(data)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error('Oops!', err)
+      })
+  }
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      {clickedPhone && <PhoneCard clickedPhone={clickedPhone} />}
+
+      {loading && <span> It's loading...</span>}
+
+      {phones.map((phone) => {
+        return (
+          <button onClick={() => { handleClick(phone.id) }} key={phone.id}>
+            {phone.name}
+          </button>
+        )
+      })}
     </div>
   );
 }
